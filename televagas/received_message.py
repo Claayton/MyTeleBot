@@ -1,12 +1,17 @@
 """App para receber e tratar mensagens do telegram"""
 import os
+import socks
 from telethon import TelegramClient, events
 from .config import API
 
 session = os.environ.get("TG_SESSION", "printer")
-PROXY = None
 
-client = TelegramClient(session, API["api_id"], API["api_hash"])
+sock = socks.socksocket()
+sock.set_proxy(socks.HTTP, "5.5.5.5", 8888)
+
+PROXY = sock.setproxy()
+
+client = TelegramClient(session, API["api_id"], API["api_hash"], proxy=PROXY)
 
 
 @client.on(events.NewMessage)
