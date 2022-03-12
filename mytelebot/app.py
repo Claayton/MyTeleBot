@@ -2,44 +2,36 @@
 import os
 from typing import Type
 from telethon import TelegramClient, events
+from telethon.tl.types import PeerChat, PeerUser
 
 
 class MyTeleBot(TelegramClient):
     """Automatizacao para telegram"""
 
-    def __init__(self, telegram_client: Type[TelegramClient]):
-
-        self.__client = telegram_client
-
-        self.__telegram_bot = None
-        self.__my_self = None
-
-    def init_app(
+    def __init__(
         self,
+        telegram_client: Type[TelegramClient],
         api_id: int,
         api_hash: str,
         bot_token: str,
         session: any = os.environ.get("TG_SESSION", "printer"),
         proxy: any = None,
     ):
-        """Inicializacao do bot"""
 
-        client = self.__client(
+        self.__client = telegram_client(
             api_id=api_id, api_hash=api_hash, session=session, proxy=proxy
         )
+        self.__bot_token = bot_token
+        self.__my_self = None
 
-        self.__telegram_bot = self.__client(
-            api_id=api_id, api_hash=api_hash, session="bot", proxy=proxy
-        )
+    def init_client(self):
+        """Inicializacao do bot"""
 
-        self.get_new_messages(client)
+        self.get_new_messages(self.__client)
 
-        client.start()
-        print("\033[31m(Press Ctrl+C to stop this)\033[m")
-        client.run_until_disconnected()
-
-        self.__telegram_bot.start(bot_token=bot_token)
-        self.__telegram_bot.run_until_disconnected()
+        self.__client.start()
+        print("\033[31m(Press Ctrl+C to stop this client!)\033[m")
+        self.__client.run_until_disconnected()
 
     def get_new_messages(self, client: Type[TelegramClient]):
         """Recebe eventos de mensagens no telegram."""
@@ -59,12 +51,12 @@ class MyTeleBot(TelegramClient):
             print(f"\033[34muser_id: \033[35m{sender.id}\033[m")
             print(f"\033[34mSou eu?: \033[35m{sender.is_self}\033[m")
 
-            if sender.username != self.__my_self.username:
+            if sender.username == self.__my_self.username:
 
                 if "python" in event.raw_text:
 
                     await client.send_message(
-                        group,
+                        PeerChat(group),
                         f"""
                         Vaga nova guys!
 
@@ -74,16 +66,9 @@ class MyTeleBot(TelegramClient):
                     )
 
                 if "oi" in event.raw_text:
-                    await self.send_bot_messages(
-                        sender.username, "Oi, sou um bot de testes!"
-                    )
+
+                    await event.reply("Oi, sou um bot de testes!")
 
                 if "vsfd" in event.raw_text:
-                    await self.send_bot_messages(sender.username, "Arrombado!")
 
-    def send_bot_messages(self, user_group, message):
-        "Enviando respostas pelo bot"
-
-        with self.__telegram_bot.send_message as bot:
-
-            bot.send_message(user_group, message)
+                    await event.reply("Arrombado!")
