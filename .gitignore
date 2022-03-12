@@ -4,3 +4,6 @@ venv
 storage.db
 storage_test.db
 .env
+bot.session
+bot.session-journal
+printer.session
