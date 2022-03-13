@@ -13,7 +13,6 @@ class MyTeleBot(TelegramClient):
         telegram_client: Type[TelegramClient],
         api_id: int,
         api_hash: str,
-        bot_token: str,
         session: any = os.environ.get("TG_SESSION", "printer"),
         proxy: any = None,
     ):
@@ -21,7 +20,6 @@ class MyTeleBot(TelegramClient):
         self.__client = telegram_client(
             api_id=api_id, api_hash=api_hash, session=session, proxy=proxy
         )
-        self.__bot_token = bot_token
         self.__my_self = None
 
     def init_client(self):
@@ -51,21 +49,21 @@ class MyTeleBot(TelegramClient):
             print(f"\033[34muser_id: \033[35m{sender.id}\033[m")
             print(f"\033[34mSou eu?: \033[35m{sender.is_self}\033[m")
 
-            if sender.username == self.__my_self.username:
+            if sender.username != self.__my_self.username:
 
-                if "python" in event.raw_text:
+                if "python" in event.raw_text.lower():
 
                     await client.send_message(
                         PeerChat(group),
                         f"""
                         Vaga nova guys!
 
-                        Usuario: {sender.username}
-                        Mensagem: {event.raw_text}
-                        """,
+Usuario: {sender.username}
+Mensagem: {event.raw_text}
+""",
                     )
 
-                if "oi" in event.raw_text:
+                if event.raw_text.lower() == "oi":
 
                     await event.reply("Oi, sou um bot de testes!")
 
