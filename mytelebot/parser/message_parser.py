@@ -71,9 +71,7 @@ class MessageParser(MessageParserInterface):
 
             return {"success": False, "message": None}
 
-        send_group_message = self.words_filter(message)
-
-        if send_group_message:
+        if self.words_filter(message):
 
             return {"success": True, "message": event.message.message}
 
@@ -83,11 +81,17 @@ class MessageParser(MessageParserInterface):
     def words_filter(cls, message: List):
         """Realiza a filtragem de palavras na mensagem"""
 
-        word_list = ["oportunidade", "vaga", "emprego", "trabalho"]
+        word_list = ["oportunidade", "vaga", "vagas", "emprego", "trabalho"]
+        response = False
 
         for word in word_list:
 
-            return bool(word in message)
+            if word in message:
+                response = True
+            else:
+                continue
+
+        return response
 
     @classmethod
     def print_message(
@@ -95,6 +99,7 @@ class MessageParser(MessageParserInterface):
     ):
         """Printa na tela informações da mensagem"""
 
+        print()
         print(f"\033[32mmensagem: \033[35m{event.message.message}\033[m")
         print(f"\033[34musername: \033[35m{sender.username}\033[m")
         print(f"\033[34muser_id: \033[35m{sender.id}\033[m")
