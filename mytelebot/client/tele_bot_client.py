@@ -3,7 +3,7 @@ import os
 from typing import Type, Union
 from telethon import TelegramClient, events
 from telethon.sessions.abstract import Session
-from telethon.tl.types import PeerChat, PeerUser
+from telethon.tl.types import PeerChat
 from mytelebot.interfaces import TeleBotClientInterface, MessageParserInterface
 
 
@@ -19,7 +19,7 @@ class TeleBotClient(TeleBotClientInterface, TelegramClient):
     ):
 
         super().__init__(session, api_id, api_hash)
-        self.__bot = parser
+        self.__parser = parser
 
     def init_client(self):
         """Inicializacao do bot"""
@@ -40,7 +40,7 @@ class TeleBotClient(TeleBotClientInterface, TelegramClient):
             sender = await event.get_sender()
             myself = await self.get_me()
 
-            response = self.__bot.parse_message(myself, sender, event)
+            response = self.__parser.parse_message(myself, sender, event)
 
             if response["reply"]:
 
