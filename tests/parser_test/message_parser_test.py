@@ -150,3 +150,55 @@ def test_parse_without_any_by_the_filter_parameters():
     response = parser.parse_message(myself, sender, event)
 
     assert response is None
+
+
+def test_words_filter_with_positive_filter():
+    """
+    Testando o metodo words_filter.
+    Realizao o teste com frases contendo todas as palavras do filtro para garantir que todas passam.
+    Nesse caso deve retornar True.
+    """
+
+    message1 = "Oportunidade de python saindo do forno guys!"
+    message2 = "Tenho varias oportunidades para dev python rapaziada"
+    message3 = "Tem vaga nova aqui na firma"
+    message4 = "Tem muitas vagas novas aqui na firma"
+    message5 = "Piazada, tem uma vaguinha de python muito boa aqui, se interessa?"
+    message6 = "Vaguinhas fresquinhas aqui guys"
+    message7 = "Quem estiver procurando emprego, eu estou com um de python aqui ein"
+    message8 = "tem trabalho para programador python aqui"
+
+    response1 = parser.words_filter(message1)
+    response2 = parser.words_filter(message2)
+    response3 = parser.words_filter(message3)
+    response4 = parser.words_filter(message4)
+    response5 = parser.words_filter(message5)
+    response6 = parser.words_filter(message6)
+    response7 = parser.words_filter(message7)
+    response8 = parser.words_filter(message8)
+
+    assert response1 is True
+    assert response2 is True
+    assert response3 is True
+    assert response4 is True
+    assert response5 is True
+    assert response6 is True
+    assert response7 is True
+    assert response8 is True
+
+
+def test_words_filter_with_negative_filter():
+    """
+    Testando o metodo words_filter.
+    Realizao o teste com frases que nao contem nenhum palavra do filtro.
+    Nesse caso deve retornar False.
+    """
+
+    message1 = "Bom dia piazada o python é uma linguagem muito boa"
+    message2 = "estou estudando Python, que bom para mim"
+
+    response1 = parser.words_filter(message1)
+    response2 = parser.words_filter(message2)
+
+    assert response1 is False
+    assert response2 is False
