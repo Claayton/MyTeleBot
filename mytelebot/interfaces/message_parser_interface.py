@@ -1,7 +1,7 @@
 """Interface para a classe MessageParser"""
 from abc import ABC, abstractmethod
 from typing import Type, List
-from telethon.tl.types import User, Message
+from telethon.tl.types import User
 from telethon.events import NewMessage
 
 
@@ -10,10 +10,7 @@ class MessageParserInterface(ABC):
 
     @abstractmethod
     def parse_message(
-        self,
-        myself: Type[User],
-        sender: Type[User],
-        event: Type[NewMessage.Event(Message)],
+        self, myself: Type[User], sender: Type[User], event: Type[NewMessage.Event]
     ):
         """Deve ser implementado"""
 

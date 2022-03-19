@@ -1,6 +1,6 @@
 """Realiza analise e filtragem de mensagens"""
 from typing import Type, List
-from telethon.tl.types import User, Message
+from telethon.tl.types import User
 from telethon.events import NewMessage
 from mytelebot.config import API
 from mytelebot.interfaces import MessageParserInterface
@@ -16,10 +16,7 @@ class MessageParser(MessageParserInterface):
         self.__group = API["group"]
 
     def parse_message(
-        self,
-        myself: Type[User],
-        sender: Type[User],
-        event: Type[NewMessage.Event(Message)],
+        self, myself: Type[User], sender: Type[User], event: Type[NewMessage.Event]
     ):
         """Analise e filtro de mensagens"""
 
@@ -60,10 +57,7 @@ class MessageParser(MessageParserInterface):
         return response
 
     def __is_python_opportunity(
-        self,
-        myself: Type[User],
-        sender: Type[User],
-        event: Type[NewMessage.Event(Message)],
+        self, myself: Type[User], sender: Type[User], event: Type[NewMessage.Event]
     ):
         """Verifica se a mensagem é uma oportunidade de vaga python"""
 
@@ -83,6 +77,8 @@ class MessageParser(MessageParserInterface):
 
             return {"success": True, "message": event.message.message}
 
+        return {"success": False, "message": None}
+
     @classmethod
     def words_filter(cls, message: List):
         """Realiza a filtragem de palavras na mensagem"""
@@ -95,10 +91,7 @@ class MessageParser(MessageParserInterface):
 
     @classmethod
     def print_message(
-        cls,
-        myself: Type[User],
-        sender: Type[User],
-        event: Type[NewMessage.Event(Message)],
+        cls, myself: Type[User], sender: Type[User], event: Type[NewMessage.Event]
     ):
         """Printa na tela informações da mensagem"""
 
