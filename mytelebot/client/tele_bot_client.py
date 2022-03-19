@@ -15,7 +15,7 @@ class TeleBotClient(TeleBotClientInterface, TelegramClient):
         parser: Type[MessageParserInterface],
         api_id: int,
         api_hash: str,
-        session: Union[str, Session] = os.environ.get("TG_SESSION", "printer")
+        session: Union[str, Session] = os.environ.get("TG_SESSION", "printer"),
     ):
 
         super().__init__(session, api_id, api_hash)
@@ -41,14 +41,18 @@ class TeleBotClient(TeleBotClientInterface, TelegramClient):
             myself = await self.get_me()
 
             response = self.__parser.parse_message(myself, sender, event)
+            self.__parser.print_message(myself, sender, event)
 
-            if response["reply"]:
+            if not response:
+
+                pass
+
+            elif response["reply"]:
 
                 await event.reply(response["message"])
 
             elif response["forward"]:
 
                 await self.send_message(
-                    PeerChat(response["entity"]),
-                    response["message"]
+                    PeerChat(int(response["entity"])), response["message"]
                 )
