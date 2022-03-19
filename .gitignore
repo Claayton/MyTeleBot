@@ -7,3 +7,4 @@ storage_test.db
 bot.session
 bot.session-journal
 printer.session
+nohup.out
