@@ -25,7 +25,7 @@ class MessageParser(MessageParserInterface):
 
         if sender.username == myself.username:
 
-            return {"success": False, "message": None}
+            return None
 
         python_opportunity = self.__is_python_opportunity(event)
 

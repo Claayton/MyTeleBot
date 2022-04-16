@@ -27,8 +27,7 @@ def test_parse_message_where_the_message_is_from_the_user(parser, myself):
 
     response = parser.parse_message(myself, sender, event)
 
-    assert response["success"] is False
-    assert response["message"] is None
+    assert response is None
 
 
 def test_parse_with_oi_message(parser, myself, sender):
