@@ -1,0 +1,10 @@
+version: '3.3'
+
+services:
+
+  bot:
+    container_name: bot
+    build:
+      context: .
+    restart: always
+    command: python3 run.py
